@@ -1,0 +1,19 @@
+{
+    "C++ Main": {
+        "scope": "cpp",
+        "prefix": "cppmain",
+        "body": [
+            "#include <iostream>",
+            "#include <print>",
+            "",
+            "using namespace std;",
+            "",
+            "int main()",
+            "{",
+            "\tprintln(\"{}\", \"hello world\");",
+            "\treturn 0;",
+            "}"
+        ],
+        "description": "C++ main with iostream and hello world"
+    }
+}
