@@ -37,11 +37,45 @@ MSYS2 터미널(UCRT64)에서 도구를 설치합니다:
 pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-ninja mingw-w64-ucrt-x86_64-gdb
 ```
 
-### 2. 환경 변수 PATH 추가
+### 2. 환경 변수 PATH 추가 ⚠️ 중요
 
-`C:\msys64\ucrt64\bin`을 시스템 PATH에 추가합니다.
+`C:\msys64\ucrt64\bin`을 시스템 PATH **최상단**에 추가합니다.
 
-### 3. VSCode 확장 설치
+> **주의**: 예전에 설치한 MinGW(예: `C:\MinGW\bin`, `C:\mingw64\bin`)가 PATH에 있으면
+> 버전 충돌로 컴파일 오류가 발생합니다. 반드시 **ucrt64\bin이 가장 위**에 있어야 합니다.
+
+**설정 방법:**
+
+1. Windows 검색 → `시스템 환경 변수 편집` → `환경 변수(N)...`
+2. 시스템 변수 목록에서 `Path` 선택 → `편집`
+3. `새로 만들기` → `C:\msys64\ucrt64\bin` 입력
+4. `위로 이동` 버튼으로 **목록 최상단**으로 올리기
+5. 확인 → 확인 → **VSCode 재시작**
+
+**확인 방법** (cmd 또는 PowerShell):
+
+```cmd
+where gcc
+```
+
+출력 첫 줄이 `C:\msys64\ucrt64\bin\gcc.exe` 이어야 합니다.
+
+### 3. CMake Configure 오류 시 (도구 미설치)
+
+VSCode를 열었을 때 하단에 CMake 오류가 뜨는 경우, MSYS2 UCRT64 터미널을 열어서 아래 명령어로 도구를 설치합니다.
+
+> **MSYS2 UCRT64 터미널**: 시작 메뉴 → `MSYS2 UCRT64` (MSYS2가 아닌 UCRT64 터미널을 사용해야 합니다)
+
+```bash
+pacman -S mingw-w64-ucrt-x86_64-gcc \
+          mingw-w64-ucrt-x86_64-toolchain \
+          mingw-w64-ucrt-x86_64-cmake \
+          mingw-w64-ucrt-x86_64-ninja
+```
+
+설치 완료 후 VSCode를 재시작하고 `Ctrl+Shift+P` → `CMake: Configure`를 실행합니다.
+
+### 4. VSCode 확장 설치
 
 - **C/C++** (`ms-vscode.cpptools`)
 - **CMake Tools** (`ms-vscode.cmake-tools`)
@@ -79,3 +113,27 @@ add_executable(${DIR_NAME} ${SOURCES})
 | 빌드 타입 | Debug (기본), Release |
 
 Release 빌드로 전환하려면 하단 상태바에서 CMake 프리셋을 `release`로 변경합니다.
+
+## 커밋 메시지 형식
+
+```
+<type>(<scope>): <요약>
+
+[선택] 본문 — 무엇을, 왜 변경했는지
+```
+
+| type | 의미 |
+|---|---|
+| `feat` | 새 실습 문제 또는 기능 추가 |
+| `fix` | 버그/오류 수정 |
+| `docs` | README 등 문서 수정 |
+| `chore` | 빌드 설정, 도구 설정 변경 |
+| `refactor` | 기능 변경 없이 코드 정리 |
+
+**예시:**
+```
+feat(q04): 포인터와 참조 실습 추가
+fix(q02): 출력 누락 수정
+docs: PATH 설정 주의사항 및 pacman 설치 명령 추가
+chore(cmake): labs/q* 자동 탐지로 변경
+```
