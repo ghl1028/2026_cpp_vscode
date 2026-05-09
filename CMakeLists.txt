@@ -18,14 +18,11 @@ foreach(dir IN LISTS LAB_DIRS)
     endif()
 endforeach()
 
-# 과제001 폴더 추가
-if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/project001"
-   AND EXISTS "${CMAKE_SOURCE_DIR}/project001/CMakeLists.txt")
-    add_subdirectory("project001")
-endif()
-
-# 과제002 폴더 추가
-if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/project002"
-   AND EXISTS "${CMAKE_SOURCE_DIR}/project002/CMakeLists.txt")
-    add_subdirectory("project002")
-endif()
+# project* 폴더 자동 감지 추가
+file(GLOB PROJECT_DIRS CONFIGURE_DEPENDS RELATIVE "${CMAKE_SOURCE_DIR}" "project*")
+foreach(dir IN LISTS PROJECT_DIRS)
+    if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/${dir}"
+       AND EXISTS "${CMAKE_SOURCE_DIR}/${dir}/CMakeLists.txt")
+        add_subdirectory("${dir}")
+    endif()
+endforeach()
