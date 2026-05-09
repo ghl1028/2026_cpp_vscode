@@ -17,15 +17,3 @@ foreach(dir IN LISTS LAB_DIRS)
         add_subdirectory("labs/${dir}")
     endif()
 endforeach()
-
-# 과제001 폴더 추가
-if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/project001"
-   AND EXISTS "${CMAKE_SOURCE_DIR}/project001/CMakeLists.txt")
-    add_subdirectory("project001")
-endif()
-
-# 과제002 폴더 추가
-if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/project002"
-   AND EXISTS "${CMAKE_SOURCE_DIR}/project002/CMakeLists.txt")
-    add_subdirectory("project002")
-endif()
