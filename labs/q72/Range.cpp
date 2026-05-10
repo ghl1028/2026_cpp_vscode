@@ -6,17 +6,21 @@ Range::Iterator::Iterator(long long current, long long step, long long stop)
 
 // TODO: 현재 값 반환
 long long Range::Iterator::operator*() const {
-    return 0;
+    return current_;
 }
 
 // TODO: 전위 증가 — current_ 를 step_ 만큼 증감하고 *this 반환
 Range::Iterator& Range::Iterator::operator++() {
+    current_ += step_;// this -> current_ += this -> step_;
     return *this;
 }
 
 // TODO: 후위 증가 — 현재 상태 사본을 만든 뒤 전위 증가, 사본 반환
 Range::Iterator Range::Iterator::operator++(int) {
-    return *this;
+    // temp = temp.current_, temp.step_, temp.stop_ 즉, this는 세 값을 모두 포함하는 값이다.
+    Range::Iterator temp = *this; 
+    ++(*this);
+    return temp;
 }
 
 // TODO: step 부호를 고려한 "끝났는지" 판단
@@ -24,11 +28,17 @@ Range::Iterator Range::Iterator::operator++(int) {
 //   - step < 0: current_ > other.current_ 이면 아직 남음 (true)
 //   - step == 0: 항상 끝 (false) — range 가 비어 있어야 하므로
 bool Range::Iterator::operator!=(const Iterator& other) const {
+    if(step_ > 0) return current_ < other.current_;
+    if(step_ < 0) return current_ > other.current_;
+
     return false;
 }
 
 // TODO: != 의 반대
 bool Range::Iterator::operator==(const Iterator& other) const {
+     if(step_ > 0) return current_ >= other.current_;
+     if(step_ < 0) return current_ <= other.current_;
+
     return true;
 }
 
@@ -49,7 +59,10 @@ Range::Range(long long start, long long stop, long long step)
 //     3) step < 0 && start <= stop
 //   빈 경우에는 begin() 을 end() 와 같게 해서 for-loop 가 0 회 돌도록 합니다.
 Range::Iterator Range::begin() const {
-    return Iterator(start_, step_, stop_);
+    if(step_ == 0) return Iterator(stop_, step_, stop_);
+    else if(step_ > 0 && start_ >= stop_) return Iterator(start_, step_, stop_);
+    else if(step_ < 0 && start_ <= stop_) return Iterator(stop_, step_, start_); 
+    else return Iterator(start_, step_, stop_); // 이게 의미가 있나?
 }
 
 Range::Iterator Range::end() const {
