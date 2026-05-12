@@ -36,8 +36,8 @@ bool Range::Iterator::operator!=(const Iterator& other) const {
 
 // TODO: != 의 반대
 bool Range::Iterator::operator==(const Iterator& other) const {
-     if(step_ > 0) return current_ >= other.current_;
-     if(step_ < 0) return current_ <= other.current_;
+    if(step_ > 0) return current_ >= other.current_;
+    if(step_ < 0) return current_ <= other.current_;
 
     return true;
 }
